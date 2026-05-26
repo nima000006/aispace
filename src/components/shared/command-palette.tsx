@@ -13,6 +13,8 @@ import {
   CommandList,
   CommandSeparator,
 } from "cmdk";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import {
   LayoutDashboard,
   Zap,
@@ -63,6 +65,9 @@ export function CommandPalette({ open, onOpenChange }: CommandPaletteProps) {
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
+      <VisuallyHidden.Root>
+        <DialogPrimitive.Title>Command Palette</DialogPrimitive.Title>
+      </VisuallyHidden.Root>
       <div
         className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh]"
         onClick={() => onOpenChange(false)}

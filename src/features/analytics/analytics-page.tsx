@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
@@ -52,6 +53,8 @@ const tooltipStyle = {
 
 export function AnalyticsPage() {
   const t = useTranslations("analytics");
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   const totalTokens = DAILY_DATA.reduce((s, d) => s + d.input + d.output, 0);
   const totalCost = DAILY_DATA.reduce((s, d) => s + d.cost, 0);
@@ -146,27 +149,31 @@ export function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="h-56">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={DAILY_DATA} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-                    <defs>
-                      <linearGradient id="inputGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                      </linearGradient>
-                      <linearGradient id="outputGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
-                        <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
-                    <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} />
-                    <YAxis tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} tickFormatter={formatTokens} />
-                    <Tooltip contentStyle={tooltipStyle} formatter={(v, name) => [formatTokens(Number(v)), name]} />
-                    <Legend wrapperStyle={{ fontSize: "11px" }} />
-                    <Area type="monotone" dataKey="input" name="Input" stroke="#3b82f6" strokeWidth={2} fill="url(#inputGrad)" />
-                    <Area type="monotone" dataKey="output" name="Output" stroke="#8b5cf6" strokeWidth={2} fill="url(#outputGrad)" />
-                  </AreaChart>
-                </ResponsiveContainer>
+                {mounted ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={DAILY_DATA} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+                      <defs>
+                        <linearGradient id="inputGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                        </linearGradient>
+                        <linearGradient id="outputGrad" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#8b5cf6" stopOpacity={0.3} />
+                          <stop offset="95%" stopColor="#8b5cf6" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
+                      <XAxis dataKey="day" tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} />
+                      <YAxis tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} tickFormatter={formatTokens} />
+                      <Tooltip contentStyle={tooltipStyle} formatter={(v, name) => [formatTokens(Number(v)), name]} />
+                      <Legend wrapperStyle={{ fontSize: "11px" }} />
+                      <Area type="monotone" dataKey="input" name="Input" stroke="#3b82f6" strokeWidth={2} fill="url(#inputGrad)" />
+                      <Area type="monotone" dataKey="output" name="Output" stroke="#8b5cf6" strokeWidth={2} fill="url(#outputGrad)" />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="animate-shimmer h-full rounded-lg" />
+                )}
               </div>
             </CardContent>
           </Card>
@@ -181,27 +188,31 @@ export function AnalyticsPage() {
             </CardHeader>
             <CardContent>
               <div className="h-40">
-                <ResponsiveContainer width="100%" height="100%">
-                  <PieChart>
-                    <Pie
-                      data={PROVIDER_DATA}
-                      cx="50%"
-                      cy="50%"
-                      innerRadius={40}
-                      outerRadius={64}
-                      paddingAngle={3}
-                      dataKey="tokens"
-                    >
-                      {PROVIDER_DATA.map((entry, i) => (
-                        <Cell key={i} fill={entry.color} />
-                      ))}
-                    </Pie>
-                    <Tooltip
-                      contentStyle={tooltipStyle}
-                      formatter={(v) => [formatTokens(Number(v)), "Tokens"]}
-                    />
-                  </PieChart>
-                </ResponsiveContainer>
+                {mounted ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={PROVIDER_DATA}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={40}
+                        outerRadius={64}
+                        paddingAngle={3}
+                        dataKey="tokens"
+                      >
+                        {PROVIDER_DATA.map((entry, i) => (
+                          <Cell key={i} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={tooltipStyle}
+                        formatter={(v) => [formatTokens(Number(v)), "Tokens"]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div className="animate-shimmer h-full rounded-lg" />
+                )}
               </div>
               <div className="space-y-1.5 mt-2">
                 {PROVIDER_DATA.map((p) => (
@@ -229,15 +240,19 @@ export function AnalyticsPage() {
           </CardHeader>
           <CardContent>
             <div className="h-48">
-              <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={MONTHLY_DATA} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
-                  <XAxis dataKey="month" tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} />
-                  <YAxis tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} tickFormatter={formatTokens} />
-                  <Tooltip contentStyle={tooltipStyle} formatter={(v) => [formatTokens(Number(v)), "Tokens"]} />
-                  <Bar dataKey="tokens" fill="#3b82f6" radius={[6, 6, 0, 0]} />
-                </BarChart>
-              </ResponsiveContainer>
+              {mounted ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={MONTHLY_DATA} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
+                    <XAxis dataKey="month" tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} />
+                    <YAxis tick={{ fontSize: 11, fill: "var(--muted-fg)" }} axisLine={false} tickLine={false} tickFormatter={formatTokens} />
+                    <Tooltip contentStyle={tooltipStyle} formatter={(v) => [formatTokens(Number(v)), "Tokens"]} />
+                    <Bar dataKey="tokens" fill="#3b82f6" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="animate-shimmer h-full rounded-lg" />
+              )}
             </div>
           </CardContent>
         </Card>

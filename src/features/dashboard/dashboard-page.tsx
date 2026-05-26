@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslations } from "next-intl";
+import { useState, useEffect } from "react";
 import {
   Zap, BookMarked, DollarSign, Activity,
   TrendingUp, ArrowUpRight, Plus, CheckCircle2,
@@ -11,7 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useAppStore, usePrompts, useTasks } from "@/store/app-store";
+import { useAppStore, useSettings, usePrompts, useTasks } from "@/store/app-store";
 import { AI_PROVIDERS } from "@/lib/ai/providers";
 import { formatTokens, formatCost, cn } from "@/lib/utils";
 import {
@@ -19,6 +20,7 @@ import {
 } from "recharts";
 import Link from "next/link";
 import { useLocale } from "next-intl";
+import { useSession } from "next-auth/react";
 
 const CHART_DATA = [
   { day: "Mon", tokens: 42000 },
@@ -42,9 +44,14 @@ export function DashboardPage() {
   const t = useTranslations("dashboard");
   const tc = useTranslations("common");
   const locale = useLocale();
+  const { data: session } = useSession();
   const { prompts } = usePrompts();
   const { tasks } = useTasks();
-  const apiKeys = useAppStore((s) => s.apiKeys);
+  const { apiKeys } = useSettings();
+  // Recharts uses DOM measurements that differ between SSR and client.
+  // Only render charts after mount to prevent hydration mismatches.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
 
   const stats = [
     {
@@ -93,7 +100,7 @@ export function DashboardPage() {
       >
         <div>
           <h1 className="text-2xl font-bold text-[var(--fg)]">
-            {t("welcome")}, Nima 👋
+            {t("welcome")}, {session?.user?.name?.split(" ")[0] ?? "there"} 👋
           </h1>
           <p className="text-sm text-[var(--muted-fg)] mt-0.5">
             Here's what's happening with your AI workspace today.
@@ -158,46 +165,50 @@ export function DashboardPage() {
             </CardHeader>
             <CardContent>
               <div className="h-48">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={CHART_DATA} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
-                    <defs>
-                      <linearGradient id="tokenGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
-                        <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
-                      </linearGradient>
-                    </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
-                    <XAxis
-                      dataKey="day"
-                      tick={{ fontSize: 11, fill: "var(--muted-fg)" }}
-                      axisLine={false}
-                      tickLine={false}
-                    />
-                    <YAxis
-                      tick={{ fontSize: 11, fill: "var(--muted-fg)" }}
-                      axisLine={false}
-                      tickLine={false}
-                      tickFormatter={(v) => formatTokens(v)}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        background: "var(--card-bg)",
-                        border: "1px solid var(--card-border)",
-                        borderRadius: "8px",
-                        fontSize: "12px",
-                        color: "var(--fg)",
-                      }}
-                      formatter={(v) => [formatTokens(Number(v)), "Tokens"]}
-                    />
-                    <Area
-                      type="monotone"
-                      dataKey="tokens"
-                      stroke="#3b82f6"
-                      strokeWidth={2}
-                      fill="url(#tokenGradient)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                {mounted ? (
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={CHART_DATA} margin={{ top: 4, right: 4, bottom: 0, left: -20 }}>
+                      <defs>
+                        <linearGradient id="tokenGradient" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.25} />
+                          <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                        </linearGradient>
+                      </defs>
+                      <CartesianGrid strokeDasharray="3 3" stroke="var(--card-border)" />
+                      <XAxis
+                        dataKey="day"
+                        tick={{ fontSize: 11, fill: "var(--muted-fg)" }}
+                        axisLine={false}
+                        tickLine={false}
+                      />
+                      <YAxis
+                        tick={{ fontSize: 11, fill: "var(--muted-fg)" }}
+                        axisLine={false}
+                        tickLine={false}
+                        tickFormatter={(v) => formatTokens(v)}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          background: "var(--card-bg)",
+                          border: "1px solid var(--card-border)",
+                          borderRadius: "8px",
+                          fontSize: "12px",
+                          color: "var(--fg)",
+                        }}
+                        formatter={(v) => [formatTokens(Number(v)), "Tokens"]}
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="tokens"
+                        stroke="#3b82f6"
+                        strokeWidth={2}
+                        fill="url(#tokenGradient)"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <Skeleton className="h-full w-full rounded-lg" />
+                )}
               </div>
             </CardContent>
           </Card>

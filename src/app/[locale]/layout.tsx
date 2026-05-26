@@ -35,6 +35,7 @@ export default async function LocaleLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body
+        suppressHydrationWarning
         className={cn(
           "h-full antialiased",
           isRTL ? "font-[var(--font-persian)]" : "font-[var(--font-sans)]"

@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import { useShallow } from "zustand/react/shallow";
 import type { AIProvider, Message, Prompt, Task, Workspace } from "@/types";
 
 // ─── Settings Slice ───────────────────────────────────────────
@@ -274,6 +275,7 @@ export const useAppStore = create<AppStore>()(
     }),
     {
       name: "aispace-store",
+      skipHydration: true,
       partialize: (state) => ({
         theme: state.theme,
         locale: state.locale,
@@ -292,61 +294,71 @@ export const useAppStore = create<AppStore>()(
 );
 
 // ─── Selector Hooks ───────────────────────────────────────────
+// useShallow prevents new object references on every render, which would
+// cause useSyncExternalStore's getServerSnapshot to loop during SSR.
 export const useSettings = () =>
-  useAppStore((s) => ({
-    theme: s.theme,
-    locale: s.locale,
-    sidebarCollapsed: s.sidebarCollapsed,
-    apiKeys: s.apiKeys,
-    setTheme: s.setTheme,
-    setLocale: s.setLocale,
-    toggleSidebar: s.toggleSidebar,
-    setApiKey: s.setApiKey,
-    removeApiKey: s.removeApiKey,
-  }));
+  useAppStore(
+    useShallow((s) => ({
+      theme: s.theme,
+      locale: s.locale,
+      sidebarCollapsed: s.sidebarCollapsed,
+      apiKeys: s.apiKeys,
+      setTheme: s.setTheme,
+      setLocale: s.setLocale,
+      toggleSidebar: s.toggleSidebar,
+      setApiKey: s.setApiKey,
+      removeApiKey: s.removeApiKey,
+    }))
+  );
 
 export const usePlayground = () =>
-  useAppStore((s) => ({
-    sessions: s.sessions,
-    activeSessionId: s.activeSessionId,
-    activeSession: s.sessions.find((sess) => sess.id === s.activeSessionId),
-    selectedModel: s.selectedModel,
-    selectedProvider: s.selectedProvider,
-    temperature: s.temperature,
-    maxTokens: s.maxTokens,
-    systemPrompt: s.systemPrompt,
-    isStreaming: s.isStreaming,
-    createSession: s.createSession,
-    deleteSession: s.deleteSession,
-    setActiveSession: s.setActiveSession,
-    addMessage: s.addMessage,
-    updateLastMessage: s.updateLastMessage,
-    setStreaming: s.setStreaming,
-    setModel: s.setModel,
-    setTemperature: s.setTemperature,
-    setMaxTokens: s.setMaxTokens,
-    setSystemPrompt: s.setSystemPrompt,
-    clearSession: s.clearSession,
-  }));
+  useAppStore(
+    useShallow((s) => ({
+      sessions: s.sessions,
+      activeSessionId: s.activeSessionId,
+      activeSession: s.sessions.find((sess) => sess.id === s.activeSessionId),
+      selectedModel: s.selectedModel,
+      selectedProvider: s.selectedProvider,
+      temperature: s.temperature,
+      maxTokens: s.maxTokens,
+      systemPrompt: s.systemPrompt,
+      isStreaming: s.isStreaming,
+      createSession: s.createSession,
+      deleteSession: s.deleteSession,
+      setActiveSession: s.setActiveSession,
+      addMessage: s.addMessage,
+      updateLastMessage: s.updateLastMessage,
+      setStreaming: s.setStreaming,
+      setModel: s.setModel,
+      setTemperature: s.setTemperature,
+      setMaxTokens: s.setMaxTokens,
+      setSystemPrompt: s.setSystemPrompt,
+      clearSession: s.clearSession,
+    }))
+  );
 
 export const usePrompts = () =>
-  useAppStore((s) => ({
-    prompts: s.prompts,
-    searchQuery: s.searchQuery,
-    selectedTags: s.selectedTags,
-    addPrompt: s.addPrompt,
-    updatePrompt: s.updatePrompt,
-    deletePrompt: s.deletePrompt,
-    toggleFavorite: s.toggleFavorite,
-    setSearchQuery: s.setSearchQuery,
-    setSelectedTags: s.setSelectedTags,
-  }));
+  useAppStore(
+    useShallow((s) => ({
+      prompts: s.prompts,
+      searchQuery: s.searchQuery,
+      selectedTags: s.selectedTags,
+      addPrompt: s.addPrompt,
+      updatePrompt: s.updatePrompt,
+      deletePrompt: s.deletePrompt,
+      toggleFavorite: s.toggleFavorite,
+      setSearchQuery: s.setSearchQuery,
+      setSelectedTags: s.setSelectedTags,
+    }))
+  );
 
 export const useTasks = () =>
-  useAppStore((s) => ({
-    tasks: s.tasks,
-    addTask: s.addTask,
-    updateTask: s.updateTask,
-    deleteTask: s.deleteTask,
-    moveTask: s.moveTask,
-  }));
+  useAppStore(
+    useShallow((s) => ({
+      tasks: s.tasks,
+      addTask: s.addTask,
+      updateTask: s.updateTask,
+      deleteTask: s.deleteTask,
+      moveTask: s.moveTask,
+    }))
+  );
