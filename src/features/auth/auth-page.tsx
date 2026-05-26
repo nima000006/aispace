@@ -226,7 +226,7 @@ export function AuthPage({ mode }: AuthPageProps) {
                   {t("password")}
                 </label>
                 {mode === "sign-in" && (
-                  <Link href="#" className="text-xs text-[var(--primary)] hover:underline">
+                  <Link href={`/${locale}/auth/forgot-password`} className="text-xs text-[var(--primary)] hover:underline">
                     {t("forgotPassword")}
                   </Link>
                 )}
