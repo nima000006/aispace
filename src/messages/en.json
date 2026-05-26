@@ -1,0 +1,216 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "playground": "AI Playground",
+    "prompts": "Prompts",
+    "tasks": "Task Manager",
+    "workflows": "Workflows",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "providers": "Providers"
+  },
+  "common": {
+    "search": "Search...",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "retry": "Retry",
+    "close": "Close",
+    "confirm": "Confirm",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "reset": "Reset",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "new": "New",
+    "all": "All",
+    "noResults": "No results found",
+    "empty": "Nothing here yet",
+    "viewAll": "View all",
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode",
+    "language": "Language"
+  },
+  "landing": {
+    "hero": {
+      "badge": "AI Workspace Platform",
+      "title": "Your AI Productivity",
+      "titleHighlight": "Command Center",
+      "subtitle": "Manage multiple AI providers, build prompt workflows, track usage, and supercharge your productivity — all in one beautiful workspace.",
+      "cta": "Get Started Free",
+      "ctaSecondary": "View Demo",
+      "trustedBy": "Trusted by teams at"
+    },
+    "features": {
+      "title": "Everything you need to work smarter",
+      "subtitle": "A complete AI productivity platform built for modern teams",
+      "multiProvider": {
+        "title": "Multi-Provider Support",
+        "description": "Connect OpenAI, Anthropic, Gemini, Groq, and more. Switch models seamlessly."
+      },
+      "playground": {
+        "title": "AI Playground",
+        "description": "Chat, compare models side-by-side, and iterate on prompts with streaming responses."
+      },
+      "prompts": {
+        "title": "Prompt Library",
+        "description": "Save, organize, and reuse your best prompts with version history and tagging."
+      },
+      "analytics": {
+        "title": "Usage Analytics",
+        "description": "Track token consumption, costs, and performance across all your AI interactions."
+      },
+      "tasks": {
+        "title": "AI Task Manager",
+        "description": "Kanban board with AI-generated subtasks, smart prioritization, and deadlines."
+      },
+      "workflows": {
+        "title": "Workflow Builder",
+        "description": "Chain prompts and AI models into automated pipelines with conditional logic."
+      }
+    },
+    "pricing": {
+      "title": "Simple, transparent pricing",
+      "subtitle": "Start free, scale as you grow",
+      "free": {
+        "name": "Free",
+        "price": "$0",
+        "description": "Perfect for individuals and exploration",
+        "features": ["100 AI messages/month", "3 AI providers", "Prompt library (50 prompts)", "Basic analytics"]
+      },
+      "pro": {
+        "name": "Pro",
+        "price": "$19",
+        "description": "For power users and small teams",
+        "features": ["Unlimited AI messages", "All AI providers", "Unlimited prompts", "Advanced analytics", "Workflow builder", "Priority support"]
+      },
+      "enterprise": {
+        "name": "Enterprise",
+        "price": "Custom",
+        "description": "For large organizations",
+        "features": ["Everything in Pro", "Custom integrations", "SSO / SAML", "Audit logs", "Dedicated support", "SLA guarantee"]
+      }
+    },
+    "faq": {
+      "title": "Frequently Asked Questions",
+      "q1": "Which AI providers are supported?",
+      "a1": "We support OpenAI, Anthropic, Google Gemini, DeepSeek, Groq, OpenRouter, Mistral, and local models via Ollama.",
+      "q2": "Is my API key secure?",
+      "a2": "Yes. Your API keys are encrypted and stored securely. They are never logged or shared.",
+      "q3": "Can I use free AI models?",
+      "a3": "Absolutely! We support Gemini Flash (free tier), Groq models (free tier), and OpenRouter free models.",
+      "q4": "Is there an RTL/Persian interface?",
+      "a4": "Yes! AISpace has full Persian language support with proper RTL layout and Vazirmatn typography."
+    }
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "signOut": "Sign Out",
+    "email": "Email",
+    "password": "Password",
+    "forgotPassword": "Forgot password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "continueWithGoogle": "Continue with Google",
+    "continueWithGitHub": "Continue with GitHub",
+    "orContinueWith": "Or continue with",
+    "privacyNotice": "By signing in, you agree to our Terms of Service and Privacy Policy."
+  },
+  "dashboard": {
+    "welcome": "Good morning",
+    "totalTokens": "Total Tokens",
+    "totalCost": "Total Cost",
+    "activeSessions": "Active Sessions",
+    "savedPrompts": "Saved Prompts",
+    "tokensThisMonth": "Tokens this month",
+    "recentActivity": "Recent Activity",
+    "providerStatus": "Provider Status",
+    "quickActions": "Quick Actions",
+    "newChat": "New Chat",
+    "newPrompt": "New Prompt",
+    "newTask": "New Task"
+  },
+  "playground": {
+    "title": "AI Playground",
+    "newChat": "New Chat",
+    "model": "Model",
+    "temperature": "Temperature",
+    "maxTokens": "Max Tokens",
+    "systemPrompt": "System Prompt",
+    "systemPromptPlaceholder": "You are a helpful assistant...",
+    "messagePlaceholder": "Type a message... (Ctrl+Enter to send)",
+    "send": "Send",
+    "stop": "Stop",
+    "clear": "Clear",
+    "copy": "Copy",
+    "regenerate": "Regenerate",
+    "compare": "Compare Models",
+    "streaming": "Streaming response...",
+    "noProvider": "No AI provider configured. Add an API key in Settings."
+  },
+  "prompts": {
+    "title": "Prompt Library",
+    "newPrompt": "New Prompt",
+    "search": "Search prompts...",
+    "sortBy": "Sort by",
+    "filterByTag": "Filter by tag",
+    "noPrompts": "No prompts yet. Create your first prompt!",
+    "promptTitle": "Prompt title",
+    "promptContent": "Prompt content",
+    "tags": "Tags",
+    "makePublic": "Make public",
+    "addToFavorites": "Add to favorites",
+    "versions": "Versions"
+  },
+  "tasks": {
+    "title": "Task Manager",
+    "newTask": "New Task",
+    "todo": "To Do",
+    "inProgress": "In Progress",
+    "done": "Done",
+    "cancelled": "Cancelled",
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "generateSubtasks": "Generate Subtasks with AI",
+    "aiSummary": "AI Summary",
+    "dueDate": "Due Date"
+  },
+  "analytics": {
+    "title": "Usage Analytics",
+    "overview": "Overview",
+    "tokenUsage": "Token Usage",
+    "costBreakdown": "Cost Breakdown",
+    "byProvider": "By Provider",
+    "daily": "Daily",
+    "monthly": "Monthly",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "total": "Total",
+    "input": "Input",
+    "output": "Output"
+  },
+  "settings": {
+    "title": "Settings",
+    "profile": "Profile",
+    "appearance": "Appearance",
+    "language": "Language",
+    "apiKeys": "API Keys",
+    "notifications": "Notifications",
+    "billing": "Billing",
+    "theme": {
+      "light": "Light",
+      "dark": "Dark",
+      "system": "System"
+    }
+  }
+}
