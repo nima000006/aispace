@@ -17,7 +17,10 @@ import {
   Sparkles,
   Plus,
   Plug,
+  LogOut,
 } from "lucide-react";
+import Image from "next/image";
+import { useSession, signOut } from "next-auth/react";
 import { cn } from "@/lib/utils";
 import { useSettings } from "@/store/app-store";
 import { Button } from "@/components/ui/button";
@@ -46,6 +49,11 @@ export function Sidebar() {
   const locale = useLocale();
   const pathname = usePathname();
   const { sidebarCollapsed, toggleSidebar } = useSettings();
+  const { data: session } = useSession();
+  const user = session?.user;
+  const initials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    : "?";
 
   const isActive = (href: string) => {
     const localePath = `/${locale}${href}`;
@@ -145,6 +153,54 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      {/* User Section */}
+      {user && (
+        <div className={cn(
+          "border-t border-[var(--sidebar-border)] p-3",
+          sidebarCollapsed ? "flex flex-col items-center gap-2" : "flex items-center gap-2.5"
+        )}>
+          {/* Avatar */}
+          <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-[var(--card-border)]">
+            {user.image ? (
+              <Image
+                src={user.image}
+                alt={user.name ?? "avatar"}
+                width={32}
+                height={32}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full gradient-brand flex items-center justify-center text-white text-xs font-bold">
+                {initials}
+              </div>
+            )}
+          </div>
+
+          <AnimatePresence>
+            {!sidebarCollapsed && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="flex-1 min-w-0"
+              >
+                <p className="text-xs font-semibold text-[var(--fg)] truncate">{user.name}</p>
+                <p className="text-[10px] text-[var(--muted-fg)] truncate">{user.email}</p>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <button
+            onClick={() => signOut({ callbackUrl: `/${locale}/auth/sign-in` })}
+            className="shrink-0 p-1.5 rounded-lg text-[var(--muted-fg)] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+            title="Sign out"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      )}
 
       {/* Bottom Controls */}
       <div className={cn(
