@@ -2,12 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useLocale, useTranslations } from "next-intl";
 import { motion } from "framer-motion";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
-import { Sparkles, Mail, Eye, EyeOff, Loader2, User } from "lucide-react";
+import { Sparkles, Mail, Eye, EyeOff, Loader2, User, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -19,6 +19,21 @@ export function AuthPage({ mode }: AuthPageProps) {
   const t = useTranslations("auth");
   const locale = useLocale();
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const urlError = searchParams.get("error");
+
+  const errorMessages: Record<string, string> = {
+    OAuthAccountNotLinked: "This email is already linked to another sign-in method. Please use the original method you signed up with.",
+    OAuthCallbackError: "Something went wrong with the OAuth sign-in. Please try again.",
+    OAuthCreateAccount: "Could not create an account. Please try again.",
+    EmailSignin: "Could not send the sign-in email. Please try again.",
+    CredentialsSignin: "Invalid email or password.",
+    SessionRequired: "Please sign in to continue.",
+    Default: "An error occurred. Please try again.",
+  };
+
+  const errorMessage = urlError ? (errorMessages[urlError] ?? errorMessages.Default) : null;
 
   const [oauthLoading, setOauthLoading] = useState<"google" | "github" | null>(null);
   const [emailLoading, setEmailLoading] = useState(false);
@@ -114,6 +129,14 @@ export function AuthPage({ mode }: AuthPageProps) {
               </Link>
             </p>
           </div>
+
+          {/* Error banner */}
+          {errorMessage && (
+            <div className="flex items-start gap-2.5 rounded-xl border border-rose-200 bg-rose-50 dark:border-rose-900 dark:bg-rose-950/30 px-4 py-3 mb-5">
+              <AlertCircle className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
+              <p className="text-sm text-rose-600 dark:text-rose-400">{errorMessage}</p>
+            </div>
+          )}
 
           {/* OAuth */}
           <div className="space-y-2.5">

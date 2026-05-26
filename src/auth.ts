@@ -17,8 +17,8 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   // JWT strategy required when using CredentialsProvider with an adapter
   session: { strategy: "jwt" },
   providers: [
-    GitHub,
-    Google,
+    GitHub({ allowDangerousEmailAccountLinking: true }),
+    Google({ allowDangerousEmailAccountLinking: true }),
     Credentials({
       credentials: {
         email: { label: "Email", type: "email" },
