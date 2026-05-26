@@ -42,5 +42,6 @@ export default auth((req) => {
 });
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon\\.ico|.*\\..*).*)"],
+  // Exclude NextAuth's own API routes so the callback handler runs uninterrupted
+  matcher: ["/((?!api/auth|_next/static|_next/image|favicon\\.ico|.*\\..*).*)" ],
 };
