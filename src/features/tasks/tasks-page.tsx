@@ -61,16 +61,16 @@ export function TasksPage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--fg)]">{t("title")}</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-[var(--fg)]">{t("title")}</h1>
           <p className="text-sm text-[var(--muted-fg)] mt-0.5">
             {tasks.filter((t) => t.status !== "done").length} active tasks
           </p>
         </div>
-        <Button variant="gradient" onClick={() => setShowForm(true)} className="gap-1.5">
+        <Button variant="gradient" onClick={() => setShowForm(true)} className="gap-1.5 self-start sm:self-auto shrink-0">
           <Plus className="w-4 h-4" />
           {t("newTask")}
         </Button>
@@ -143,7 +143,8 @@ export function TasksPage() {
       </AnimatePresence>
 
       {/* Kanban Board */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="overflow-x-auto -mx-4 px-4 md:mx-0 md:px-0">
+      <div className="grid grid-cols-4 gap-3 md:gap-4 min-w-[640px] md:min-w-0">
         {COLUMNS.map((col) => {
           const colTasks = tasks.filter((t) => t.status === col.id);
           const Icon = col.icon;
@@ -205,6 +206,7 @@ export function TasksPage() {
             </div>
           );
         })}
+      </div>
       </div>
     </div>
   );

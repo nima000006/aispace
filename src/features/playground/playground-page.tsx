@@ -9,7 +9,7 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { oneDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 import {
   Send, StopCircle, Plus, Trash2, Copy, RotateCcw,
-  ChevronDown, Settings2, Sparkles, Bot, User,
+  ChevronDown, Settings2, Sparkles, Bot, User, PanelLeft,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -27,6 +27,7 @@ export function PlaygroundPage() {
   const t = useTranslations("playground");
   const [input, setInput] = useState("");
   const [showSettings, setShowSettings] = useState(false);
+  const [showSessions, setShowSessions] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const abortRef = useRef<(() => void) | null>(null);
 
@@ -127,18 +128,40 @@ export function PlaygroundPage() {
   );
 
   return (
-    <div className="flex h-full">
+    <div className="flex h-full relative">
+      {/* Mobile session backdrop */}
+      {showSessions && (
+        <div
+          className="fixed inset-0 z-40 bg-black/40 md:hidden"
+          onClick={() => setShowSessions(false)}
+        />
+      )}
+
       {/* Session list */}
-      <div className="w-56 border-e border-[var(--card-border)] bg-[var(--card-bg)] flex flex-col shrink-0">
-        <div className="p-3 border-b border-[var(--card-border)]">
+      <div className={cn(
+        // Desktop: always visible, in flex flow
+        "hidden md:flex md:w-56 border-e border-[var(--card-border)] bg-[var(--card-bg)] flex-col shrink-0",
+        // Mobile: fixed overlay, toggle via showSessions
+        showSessions && "!fixed inset-y-0 start-0 z-50 !flex w-64 shadow-xl"
+      )}>
+        <div className="p-3 border-b border-[var(--card-border)] flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            className="w-full gap-1.5"
+            className="flex-1 gap-1.5"
             onClick={createSession}
           >
             <Plus className="w-3.5 h-3.5" />
             {t("newChat")}
+          </Button>
+          {/* Mobile close */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="md:hidden"
+            onClick={() => setShowSessions(false)}
+          >
+            <Trash2 className="w-3.5 h-3.5 text-[var(--muted-fg)]" />
           </Button>
         </div>
         <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
@@ -151,7 +174,7 @@ export function PlaygroundPage() {
                   ? "bg-[var(--accent-bg)] text-[var(--accent-fg)]"
                   : "text-[var(--muted-fg)] hover:bg-[var(--muted-bg)] hover:text-[var(--fg)]"
               )}
-              onClick={() => setActiveSession(sess.id)}
+              onClick={() => { setActiveSession(sess.id); setShowSessions(false); }}
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
               <span className="flex-1 truncate text-xs">{sess.title || t("newChat")}</span>
@@ -169,7 +192,18 @@ export function PlaygroundPage() {
       {/* Main chat */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Toolbar */}
-        <div className="h-12 border-b border-[var(--card-border)] flex items-center gap-3 px-4 bg-[var(--bg)] shrink-0">
+        <div className="h-12 border-b border-[var(--card-border)] flex items-center gap-2 md:gap-3 px-3 md:px-4 bg-[var(--bg)] shrink-0">
+          {/* Mobile: sessions toggle */}
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="md:hidden"
+            onClick={() => setShowSessions((v) => !v)}
+            aria-label="Sessions"
+          >
+            <PanelLeft className="w-4 h-4 text-[var(--muted-fg)]" />
+          </Button>
+
           {/* Model selector */}
           <div className="relative">
             <select
@@ -178,7 +212,7 @@ export function PlaygroundPage() {
                 const [prov, ...rest] = e.target.value.split("::");
                 setModel(rest.join("::"), prov as any);
               }}
-              className="appearance-none h-8 rounded-lg border border-[var(--card-border)] bg-[var(--card-bg)] px-3 pe-7 text-xs text-[var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] cursor-pointer"
+              className="appearance-none h-8 rounded-lg border border-[var(--card-border)] bg-[var(--card-bg)] px-3 pe-7 text-xs text-[var(--fg)] focus:outline-none focus:ring-2 focus:ring-[var(--primary)] cursor-pointer max-w-[160px] sm:max-w-none"
             >
               {AI_PROVIDERS.map((p) =>
                 p.models.map((m) => (

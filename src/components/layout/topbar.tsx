@@ -1,18 +1,20 @@
 "use client";
 
-import { Search, Bell, LogOut, User } from "lucide-react";
+import { Search, Bell, LogOut, User, Menu } from "lucide-react";
 import { useTranslations, useLocale } from "next-intl";
 import { useSession, signOut } from "next-auth/react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { CommandPalette } from "@/components/shared/command-palette";
 import { useState } from "react";
+import { useSettings } from "@/store/app-store";
 import { cn } from "@/lib/utils";
 
 export function Topbar() {
   const t = useTranslations("common");
   const locale = useLocale();
   const { data: session } = useSession();
+  const { setMobileSidebarOpen } = useSettings();
   const [commandOpen, setCommandOpen] = useState(false);
   const [avatarMenuOpen, setAvatarMenuOpen] = useState(false);
 
@@ -23,21 +25,33 @@ export function Topbar() {
 
   return (
     <>
-      <header className="h-14 border-b border-[var(--card-border)] bg-[var(--bg)] flex items-center gap-4 px-6 shrink-0">
+      <header className="h-14 border-b border-[var(--card-border)] bg-[var(--bg)] flex items-center gap-2 px-3 md:gap-4 md:px-6 shrink-0">
+
+        {/* Hamburger — mobile only */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden shrink-0"
+          onClick={() => setMobileSidebarOpen(true)}
+          aria-label="Open menu"
+        >
+          <Menu className="w-5 h-5 text-[var(--muted-fg)]" />
+        </Button>
+
         {/* Search trigger */}
         <button
           onClick={() => setCommandOpen(true)}
           className="flex-1 max-w-sm flex items-center gap-2 h-8 px-3 rounded-lg border border-[var(--card-border)] bg-[var(--muted-bg)] text-sm text-[var(--muted-fg)] hover:bg-[var(--card-border)] transition-colors cursor-text"
         >
           <Search className="w-3.5 h-3.5 shrink-0" />
-          <span className="flex-1 text-start">{t("search")}</span>
+          <span className="flex-1 text-start hidden sm:block">{t("search")}</span>
           <kbd className="hidden sm:inline-flex h-5 items-center gap-0.5 rounded border border-[var(--card-border)] bg-[var(--muted-bg)] px-1.5 text-[10px] font-medium">
             ⌘K
           </kbd>
         </button>
 
-        <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon" aria-label="Notifications">
+        <div className="flex items-center gap-1 ms-auto">
+          <Button variant="ghost" size="icon" aria-label="Notifications" className="hidden sm:flex">
             <Bell className="w-4 h-4 text-[var(--muted-fg)]" />
           </Button>
 
@@ -65,12 +79,10 @@ export function Topbar() {
 
             {avatarMenuOpen && (
               <>
-                {/* Backdrop */}
                 <div
                   className="fixed inset-0 z-40"
                   onClick={() => setAvatarMenuOpen(false)}
                 />
-                {/* Dropdown */}
                 <div className="absolute end-0 top-10 z-50 w-56 rounded-xl border border-[var(--card-border)] bg-[var(--card-bg)] shadow-xl p-1.5">
                   {user && (
                     <div className="px-3 py-2.5 border-b border-[var(--card-border)] mb-1">

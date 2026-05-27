@@ -99,17 +99,17 @@ export function AnalyticsPage() {
   ];
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-4 md:space-y-6">
       {/* Header */}
       <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-        <h1 className="text-2xl font-bold text-[var(--fg)]">{t("title")}</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-[var(--fg)]">{t("title")}</h1>
         <p className="text-sm text-[var(--muted-fg)] mt-0.5">
           Last 7 days · Updated just now
         </p>
       </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {stats.map((s, i) => {
           const Icon = s.icon;
           return (
@@ -136,7 +136,7 @@ export function AnalyticsPage() {
         })}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Daily Token Usage */}
         <motion.div
           initial="hidden" animate="visible" variants={fadeUp} custom={4}

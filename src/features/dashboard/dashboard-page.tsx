@@ -92,21 +92,21 @@ export function DashboardPage() {
   const recentTasks = tasks.slice(0, 5);
 
   return (
-    <div className="p-6 space-y-6 max-w-7xl mx-auto">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6 max-w-7xl mx-auto">
       {/* Header */}
       <motion.div
         initial="hidden" animate="visible" variants={fadeUp}
-        className="flex items-center justify-between"
+        className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
       >
         <div>
-          <h1 className="text-2xl font-bold text-[var(--fg)]">
+          <h1 className="text-xl md:text-2xl font-bold text-[var(--fg)]">
             {t("welcome")}, {session?.user?.name?.split(" ")[0] ?? "there"} 👋
           </h1>
           <p className="text-sm text-[var(--muted-fg)] mt-0.5">
             Here's what's happening with your AI workspace today.
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 shrink-0">
           <Link href={`/${locale}/playground`}>
             <Button variant="gradient" size="sm" className="gap-1.5">
               <Plus className="w-3.5 h-3.5" />
@@ -117,7 +117,7 @@ export function DashboardPage() {
       </motion.div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4">
         {stats.map((stat, i) => {
           const Icon = stat.icon;
           return (
@@ -144,7 +144,7 @@ export function DashboardPage() {
         })}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6">
         {/* Token Usage Chart */}
         <motion.div
           initial="hidden" animate="visible" variants={fadeUp} custom={4}
@@ -252,7 +252,7 @@ export function DashboardPage() {
         </motion.div>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
         {/* Quick Actions */}
         <motion.div initial="hidden" animate="visible" variants={fadeUp} custom={6}>
           <Card>

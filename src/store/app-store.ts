@@ -8,10 +8,12 @@ interface SettingsState {
   theme: "light" | "dark" | "system";
   locale: "en" | "fa";
   sidebarCollapsed: boolean;
+  mobileSidebarOpen: boolean;
   apiKeys: Partial<Record<AIProvider, string>>;
   setTheme: (theme: "light" | "dark" | "system") => void;
   setLocale: (locale: "en" | "fa") => void;
   toggleSidebar: () => void;
+  setMobileSidebarOpen: (open: boolean) => void;
   setApiKey: (provider: AIProvider, key: string) => void;
   removeApiKey: (provider: AIProvider) => void;
 }
@@ -95,11 +97,13 @@ export const useAppStore = create<AppStore>()(
       theme: "system",
       locale: "en",
       sidebarCollapsed: false,
+      mobileSidebarOpen: false,
       apiKeys: {},
 
       setTheme: (theme) => set({ theme }),
       setLocale: (locale) => set({ locale }),
       toggleSidebar: () => set((s) => ({ sidebarCollapsed: !s.sidebarCollapsed })),
+      setMobileSidebarOpen: (open) => set({ mobileSidebarOpen: open }),
       setApiKey: (provider, key) =>
         set((s) => ({ apiKeys: { ...s.apiKeys, [provider]: key } })),
       removeApiKey: (provider) =>
@@ -302,10 +306,12 @@ export const useSettings = () =>
       theme: s.theme,
       locale: s.locale,
       sidebarCollapsed: s.sidebarCollapsed,
+      mobileSidebarOpen: s.mobileSidebarOpen,
       apiKeys: s.apiKeys,
       setTheme: s.setTheme,
       setLocale: s.setLocale,
       toggleSidebar: s.toggleSidebar,
+      setMobileSidebarOpen: s.setMobileSidebarOpen,
       setApiKey: s.setApiKey,
       removeApiKey: s.removeApiKey,
     }))

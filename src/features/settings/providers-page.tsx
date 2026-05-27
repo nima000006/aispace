@@ -47,9 +47,9 @@ export function ProvidersPage() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-3xl mx-auto space-y-4 md:space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[var(--fg)]">AI Providers</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-[var(--fg)]">AI Providers</h1>
         <p className="text-sm text-[var(--muted-fg)] mt-0.5">
           Connect your API keys to start using AI models. Keys are stored locally in your browser.
         </p>

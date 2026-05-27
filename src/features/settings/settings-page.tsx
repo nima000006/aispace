@@ -27,9 +27,9 @@ export function SettingsPage() {
   ];
 
   return (
-    <div className="p-6 max-w-2xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-2xl mx-auto space-y-4 md:space-y-6">
       <motion.div initial="hidden" animate="visible" variants={fadeUp}>
-        <h1 className="text-2xl font-bold text-[var(--fg)]">{t("title")}</h1>
+        <h1 className="text-xl md:text-2xl font-bold text-[var(--fg)]">{t("title")}</h1>
         <p className="text-sm text-[var(--muted-fg)] mt-0.5">
           Manage your account preferences and workspace settings.
         </p>
@@ -45,7 +45,7 @@ export function SettingsPage() {
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
               <div className="w-16 h-16 rounded-2xl gradient-brand flex items-center justify-center text-white text-xl font-bold">
                 N
               </div>

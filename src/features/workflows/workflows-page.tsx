@@ -71,16 +71,16 @@ export function WorkflowsPage() {
   };
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-6">
+    <div className="p-4 md:p-6 max-w-7xl mx-auto space-y-4 md:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[var(--fg)]">{t("workflows")}</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-[var(--fg)]">{t("workflows")}</h1>
           <p className="text-sm text-[var(--muted-fg)] mt-0.5">
             Build AI pipelines that chain prompts and models together.
           </p>
         </div>
-        <Button variant="gradient" className="gap-1.5">
+        <Button variant="gradient" className="gap-1.5 self-start sm:self-auto shrink-0">
           <Plus className="w-4 h-4" />
           New Workflow
         </Button>
