@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations, useLocale } from "next-intl";
+import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -48,9 +48,16 @@ const NAV_ITEMS: NavItem[] = [
 
 export function Sidebar() {
   const t = useTranslations("nav");
-  const locale = useLocale();
   const pathname = usePathname();
-  const { sidebarCollapsed, toggleSidebar, mobileSidebarOpen, setMobileSidebarOpen } = useSettings();
+  const {
+    locale,
+    sidebarCollapsed,
+    toggleSidebar,
+    mobileSidebarOpen,
+    setMobileSidebarOpen,
+  } = useSettings();
+
+  const isRTL = locale === "fa";
   const { data: session } = useSession();
   const user = session?.user;
   const initials = user?.name
@@ -69,6 +76,16 @@ export function Sidebar() {
   };
 
   const closeMobile = () => setMobileSidebarOpen(false);
+
+  // Mobile closed translate: use JS locale instead of rtl: CSS variant
+  // because [dir="rtl"] selector has higher specificity than @media query,
+  // which would override md:translate-x-0 and hide the sidebar on desktop too.
+  const mobileClosedTranslate = isRTL ? "translate-x-full" : "-translate-x-full";
+
+  // Collapse toggle chevron: flipped in RTL
+  // LTR collapsed → ChevronRight (expand toward content on right)
+  // RTL collapsed → ChevronLeft  (expand toward content on left)
+  const CollapseIcon = sidebarCollapsed !== isRTL ? ChevronRight : ChevronLeft;
 
   return (
     <>
@@ -90,15 +107,15 @@ export function Sidebar() {
       {/* Sidebar */}
       <aside
         className={cn(
-          // Layout
+          // Base layout
           "flex flex-col h-full bg-[var(--sidebar-bg)] border-e border-[var(--sidebar-border)] shrink-0 overflow-hidden z-50",
-          // Mobile: fixed overlay, slide in/out
+          // Mobile: fixed overlay
           "fixed inset-y-0 start-0",
           "transition-transform duration-[250ms] ease-[cubic-bezier(0.4,0,0.2,1)]",
-          mobileSidebarOpen ? "translate-x-0" : "-translate-x-full rtl:translate-x-full",
-          // Desktop: relative in flex flow, no translate
+          mobileSidebarOpen ? "translate-x-0" : mobileClosedTranslate,
+          // Desktop: back in flex flow, no translate, animated width
           "md:relative md:inset-auto md:translate-x-0 md:transition-[width] md:duration-[250ms]",
-          // Width
+          // Width: always 260 on mobile; collapses on desktop
           "w-[260px]",
           sidebarCollapsed ? "md:w-[72px]" : "md:w-[260px]",
         )}
@@ -114,11 +131,11 @@ export function Sidebar() {
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <AnimatePresence>
-              {(!sidebarCollapsed) && (
+              {!sidebarCollapsed && (
                 <motion.span
-                  initial={{ opacity: 0, x: -8 }}
+                  initial={{ opacity: 0, x: isRTL ? 8 : -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -8 }}
+                  exit={{ opacity: 0, x: isRTL ? 8 : -8 }}
                   transition={{ duration: 0.15 }}
                   className="font-bold text-base text-[var(--fg)] whitespace-nowrap"
                 >
@@ -262,11 +279,7 @@ export function Sidebar() {
           className="hidden md:flex absolute top-1/2 -end-3 z-20 h-6 w-6 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--card-border)] bg-[var(--card-bg)] shadow-sm hover:bg-[var(--muted-bg)] transition-colors"
           aria-label="Toggle sidebar"
         >
-          {sidebarCollapsed ? (
-            <ChevronRight className="w-3 h-3 text-[var(--muted-fg)]" />
-          ) : (
-            <ChevronLeft className="w-3 h-3 text-[var(--muted-fg)]" />
-          )}
+          <CollapseIcon className="w-3 h-3 text-[var(--muted-fg)]" />
         </button>
       </aside>
     </>
