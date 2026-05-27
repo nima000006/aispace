@@ -26,15 +26,18 @@ export default auth((req) => {
 
   const isAuthenticated = !!req.auth;
   const isAuthRoute = pathAfterLocale.startsWith("/auth");
+  const isRoot = pathAfterLocale === "/" || pathAfterLocale === "";
   const isProtected = PROTECTED.some(
     (p) => pathAfterLocale === p || pathAfterLocale.startsWith(p + "/")
   );
 
+  // Unauthenticated user trying to reach a protected page → send to sign-in
   if (!isAuthenticated && isProtected) {
     return NextResponse.redirect(new URL(`/${locale}/auth/sign-in`, req.url));
   }
 
-  if (isAuthenticated && isAuthRoute) {
+  // Authenticated user on auth pages OR the root/landing page → send to dashboard
+  if (isAuthenticated && (isAuthRoute || isRoot)) {
     return NextResponse.redirect(new URL(`/${locale}/dashboard`, req.url));
   }
 
