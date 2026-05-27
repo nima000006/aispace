@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   LayoutDashboard,
@@ -57,7 +57,11 @@ export function Sidebar() {
     setMobileSidebarOpen,
   } = useSettings();
 
-  const isRTL = locale === "fa";
+  // useLocale() reads the locale from the actual URL — always in sync.
+  // useSettings().locale can lag behind after navigation, causing links
+  // to generate /en/... hrefs even while on /fa/... pages.
+  const urlLocale = useLocale();
+  const isRTL = urlLocale === "fa";
   const { data: session } = useSession();
   const user = session?.user;
   const initials = user?.name
@@ -70,7 +74,7 @@ export function Sidebar() {
   }, [pathname]);
 
   const isActive = (href: string) => {
-    const localePath = `/${locale}${href}`;
+    const localePath = `/${urlLocale}${href}`;
     if (href === "/dashboard") return pathname === localePath;
     return pathname.startsWith(localePath);
   };
@@ -123,7 +127,7 @@ export function Sidebar() {
         {/* Logo */}
         <div className="flex items-center h-14 px-4 border-b border-[var(--sidebar-border)] shrink-0">
           <Link
-            href={`/${locale}/dashboard`}
+            href={`/${urlLocale}/dashboard`}
             className="flex items-center gap-2.5 min-w-0 flex-1"
             onClick={closeMobile}
           >
@@ -156,7 +160,7 @@ export function Sidebar() {
 
         {/* New Chat CTA */}
         <div className="px-3 py-3 border-b border-[var(--sidebar-border)]">
-          <Link href={`/${locale}/playground`} onClick={closeMobile}>
+          <Link href={`/${urlLocale}/playground`} onClick={closeMobile}>
             <Button
               variant="gradient"
               size={sidebarCollapsed ? "icon" : "default"}
@@ -188,7 +192,7 @@ export function Sidebar() {
             return (
               <Link
                 key={item.key}
-                href={`/${locale}${item.href}`}
+                href={`/${urlLocale}${item.href}`}
                 onClick={closeMobile}
                 className={cn(
                   "sidebar-item flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium",
@@ -255,7 +259,7 @@ export function Sidebar() {
             </AnimatePresence>
 
             <button
-              onClick={() => signOut({ callbackUrl: `/${locale}/auth/sign-in` })}
+              onClick={() => signOut({ callbackUrl: `/${urlLocale}/auth/sign-in` })}
               className="shrink-0 p-1.5 rounded-lg text-[var(--muted-fg)] hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
               title="Sign out"
             >
