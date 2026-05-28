@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
     },
   });
 
-  await sendPasswordResetEmail(email, rawToken);
+  //await sendPasswordResetEmail(email, rawToken);
 
   return NextResponse.json({ success: true });
 }
