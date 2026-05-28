@@ -71,7 +71,7 @@ export function ForgotPasswordPage() {
               <h2 className="text-xl font-bold text-[var(--fg)] mb-2">Check your email</h2>
               <p className="text-sm text-[var(--muted-fg)] mb-6">
                 If <span className="font-medium text-[var(--fg)]">{email}</span> has an account,
-                you'll receive a password reset link shortly.
+                youll receive a password reset link shortly.
               </p>
               <Link href={`/${locale}/auth/sign-in`}>
                 <Button variant="outline" className="w-full gap-2">
@@ -84,7 +84,7 @@ export function ForgotPasswordPage() {
               <div className="mb-6">
                 <h1 className="text-2xl font-bold text-[var(--fg)] mb-1">Forgot password?</h1>
                 <p className="text-sm text-[var(--muted-fg)]">
-                  Enter your email and we'll send you a reset link.
+                  Enter your email and well send you a reset link.
                 </p>
               </div>
 
