@@ -1,7 +1,10 @@
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
 import crypto from "crypto";
 import { prisma } from "@/lib/db";
 import { sendPasswordResetEmail } from "@/lib/email";
+
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
